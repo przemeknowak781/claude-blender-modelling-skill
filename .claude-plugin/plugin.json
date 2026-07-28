@@ -1,0 +1,20 @@
+{
+  "name": "blender-cad",
+  "version": "0.1.0",
+  "description": "Precision, dimension-driven CAD-style modelling in Blender 5.2 LTS: mesh repair for solver and scan output, fabrication geometry, parametric variants, interoperability, drawing documentation, and diagnostics. Every API identifier verified against a live Blender 5.2 build.",
+  "author": {
+    "name": "Przemek Nowak"
+  },
+  "keywords": [
+    "blender",
+    "cad",
+    "parametric",
+    "mesh-repair",
+    "fabrication",
+    "cnc",
+    "3d-printing",
+    "geometry-nodes",
+    "topology-optimisation"
+  ],
+  "license": "CC-BY-4.0"
+}
