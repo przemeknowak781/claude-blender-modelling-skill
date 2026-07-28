@@ -44,6 +44,7 @@ GN_NODES = [
     'GeometryNodeMeshToCurve', 'GeometryNodeMeshToPoints',
     'GeometryNodeSplitEdges', 'GeometryNodeEdgePathsToCurves',
     'ShaderNodeMath', 'ShaderNodeVectorMath', 'ShaderNodeMapRange',
+    'ShaderNodeCombineXYZ', 'ShaderNodeSeparateXYZ', 'ShaderNodeClamp',
     'FunctionNodeCompare', 'FunctionNodeRandomValue', 'FunctionNodeBooleanMath',
     'FunctionNodeAlignRotationToVector', 'FunctionNodeInputVector',
     'NodeGroupInput', 'NodeGroupOutput',
@@ -68,7 +69,20 @@ OPERATORS = [
     ('wm', 'obj_import'), ('wm', 'obj_export'),
     ('wm', 'ply_import'), ('wm', 'ply_export'),
     ('wm', 'save_as_mainfile'), ('wm', 'open_mainfile'),
+    ('wm', 'read_factory_settings'), ('wm', 'read_homefile'),
+    ('wm', 'quit_blender'), ('wm', 'save_mainfile'),
+    ('object', 'modifier_move_to_index'), ('object', 'modifier_remove'),
+    ('object', 'modifier_move_up'), ('object', 'modifier_move_down'),
+    ('object', 'parent_set'), ('object', 'delete'),
+    ('mesh', 'select_mode'), ('mesh', 'edge_split'),
+    ('wm', 'ply_export'), ('wm', 'usd_export'), ('wm', 'usd_import'),
+    ('wm', 'gpencil_import_svg'),
+    ('export_scene', 'gltf'), ('import_scene', 'gltf'),
+    ('render', 'render'), ('render', 'opengl'),
 ]
+
+# Node TREE bl_idnames (not nodes): valid identifiers of a different kind.
+NODE_TREES = ['GeometryNodeTree', 'ShaderNodeTree', 'CompositorNodeTree']
 
 STRUCTS = [
     'UnitSettings', 'Scene', 'Object', 'Mesh', 'MeshPolygon', 'MeshVertex',
@@ -144,6 +158,7 @@ def main():
         "operators": {},
         "structs": {},
         "bmesh_ops": [],
+        "node_trees": NODE_TREES,
     }
 
     # --- modifiers -------------------------------------------------------
@@ -239,6 +254,39 @@ def main():
             except Exception as exc:
                 out[p.identifier] = {"error": str(exc)}
         data["structs"][sname] = out
+
+    # --- runtime-only types ----------------------------------------------
+    # Some 5.2 types are reachable only from a live instance, not via
+    # bpy.types (e.g. the Geometry Nodes modifier input interface). Record
+    # their real class names so documentation may refer to them.
+    runtime = {}
+    ng_rt = bpy.data.node_groups.new("RT", 'GeometryNodeTree')
+    ng_rt.interface.new_socket(name="Geometry", in_out='OUTPUT',
+                               socket_type='NodeSocketGeometry')
+    sock_rt = ng_rt.interface.new_socket(name="Value", in_out='INPUT',
+                                         socket_type='NodeSocketFloat')
+    mod_rt = ob.modifiers.new(name="RT", type='NODES')
+    mod_rt.node_group = ng_rt
+    runtime[type(mod_rt.properties).__name__] = {
+        "reached_via": "modifier.properties",
+        "properties": [p.identifier for p in mod_rt.properties.bl_rna.properties
+                       if p.identifier != 'rna_type'],
+    }
+    inputs_rt = mod_rt.properties.inputs
+    runtime[type(inputs_rt).__name__] = {
+        "reached_via": "modifier.properties.inputs",
+        "properties": [p.identifier for p in inputs_rt.bl_rna.properties
+                       if p.identifier != 'rna_type'],
+    }
+    sock_acc = getattr(inputs_rt, sock_rt.identifier)
+    runtime["_socket_accessor_properties"] = {
+        "reached_via": "modifier.properties.inputs.<Socket_N>",
+        "properties": [p.identifier for p in sock_acc.bl_rna.properties
+                       if p.identifier != 'rna_type'],
+    }
+    ob.modifiers.remove(mod_rt)
+    bpy.data.node_groups.remove(ng_rt)
+    data["runtime_types"] = runtime
 
     # --- bmesh.ops -------------------------------------------------------
     import bmesh

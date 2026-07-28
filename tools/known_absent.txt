@@ -1,0 +1,7 @@
+# Identifiers named in this skill BECAUSE they do not exist in Blender 5.2.
+# The skill has to be able to say "Blender does not have this" by name, so the
+# validator must permit these AND assert they stay absent. If any of these
+# appears in a future release, the validator fails and the docs must change.
+#
+# format:  <identifier> :: <reason it is named>
+GeometryNodeBevel :: No Bevel node exists in Geometry Nodes 5.2; ng.nodes.new('GeometryNodeBevel') raises "Node type GeometryNodeBevel undefined". Named so the skill can correct the common assumption that one exists.

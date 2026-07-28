@@ -1,3 +1,8 @@
 __pycache__/
 *.pyc
 tests/output/
+
+# Fixtures are generated deterministically by tests/fixtures/make_fixtures.py
+# and rebuilt automatically on the first run of tests/run_evals.py.
+tests/fixtures/*.blend
+tests/fixtures/*.stl

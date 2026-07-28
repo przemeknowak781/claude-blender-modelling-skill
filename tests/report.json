@@ -1,0 +1,1132 @@
+{
+ "blender": "Blender 5.2.0 LTS",
+ "build": "build hash: fbe6228777e7",
+ "cases": [
+  {
+   "id": "T-01",
+   "file": "t01_repair_solver_mesh.py",
+   "task": "Repair a ~1.7M-triangle marching-cubes mesh: drop isolated debris and loose geometry, make normals consistent, reduce to 100k triangles while preserving volume.",
+   "priority": "P0",
+   "assertions": [
+    {
+     "name": "input was dense enough to be representative",
+     "passed": true,
+     "detail": "1705996 tris"
+    },
+    {
+     "name": "input had detectable damage",
+     "passed": true,
+     "detail": "shells=2 loose=12 flipped_edges=234"
+    },
+    {
+     "name": "isolated components removed",
+     "passed": true,
+     "detail": "shells=1"
+    },
+    {
+     "name": "loose vertices removed",
+     "passed": true,
+     "detail": "loose=0"
+    },
+    {
+     "name": "normals consistent",
+     "passed": true,
+     "detail": "inconsistent=0"
+    },
+    {
+     "name": "normals point outward",
+     "passed": true,
+     "detail": "signed_volume=1.466828"
+    },
+    {
+     "name": "zero non-manifold edges",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "triangle count under 110k",
+     "passed": true,
+     "detail": "100000 tris"
+    },
+    {
+     "name": "volume preserved within 2%",
+     "passed": true,
+     "detail": "1.470033 -> 1.466828 (0.218%)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-101",
+    "R-102",
+    "R-105",
+    "R-106",
+    "R-107"
+   ],
+   "seconds": 140.7821023464203
+  },
+  {
+   "id": "T-02",
+   "file": "t02_solidify_thickness.py",
+   "task": "Give a variable-curvature open surface a uniform 18 mm wall thickness.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "input surface was open",
+     "passed": true,
+     "detail": "boundary_edges=96"
+    },
+    {
+     "name": "object scale applied before Solidify",
+     "passed": true,
+     "detail": "scale=(1.0, 1.0, 1.0)"
+    },
+    {
+     "name": "result is closed",
+     "passed": true,
+     "detail": "boundary_edges=0"
+    },
+    {
+     "name": "result is manifold",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "no self-intersections introduced",
+     "passed": true,
+     "detail": "self_intersecting=0"
+    },
+    {
+     "name": "10 sampled thicknesses in 17.5-18.5 mm",
+     "passed": true,
+     "detail": "10/10 in range; min=17.970mm max=18.012mm"
+    },
+    {
+     "name": "volume matches area x thickness within 5%",
+     "passed": true,
+     "detail": "expected=0.079464 actual=0.079506 (0.05%)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-201",
+    "R-202"
+   ],
+   "seconds": 1.2105000019073486
+  },
+  {
+   "id": "T-03",
+   "file": "t03_boolean_coplanar.py",
+   "task": "Boolean-difference two solids that share exactly coplanar faces.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "both boolean inputs manifold before the operation",
+     "passed": true,
+     "detail": "base_manifold=True cutter_manifold=True"
+    },
+    {
+     "name": "result is manifold",
+     "passed": true,
+     "detail": "non_manifold=0 closed=True"
+    },
+    {
+     "name": "no degenerate faces below 1e-9",
+     "passed": true,
+     "detail": "degenerate=0"
+    },
+    {
+     "name": "normals consistent",
+     "passed": true,
+     "detail": "inconsistent=0"
+    },
+    {
+     "name": "volume equals base minus cutter within 0.5%",
+     "passed": true,
+     "detail": "expected=7.000000 actual=7.000200 (0.003%)"
+    },
+    {
+     "name": "result is a single shell",
+     "passed": true,
+     "detail": "shells=1"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-206",
+    "R-207"
+   ],
+   "seconds": 1.1080520153045654
+  },
+  {
+   "id": "T-04",
+   "file": "t04_section_contours.py",
+   "task": "Extract section contours at 12 heights through a solid and confirm each is a closed loop of the expected length.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "exactly 12 contours produced",
+     "passed": true,
+     "detail": "12 contours from 12 levels"
+    },
+    {
+     "name": "every contour is a closed loop",
+     "passed": true,
+     "detail": "closed=[True, True, True, True, True, True, True, True, True, True, True, True]"
+    },
+    {
+     "name": "total length matches independent calculation within 0.1%",
+     "passed": true,
+     "detail": "expected=37.683974 actual=37.683974 (0.0000%)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-216",
+    "R-409"
+   ],
+   "seconds": 1.0371301174163818
+  },
+  {
+   "id": "T-05",
+   "file": "t05_gn_variant_series.py",
+   "task": "Build a Geometry Nodes graph with 4 inputs and generate 8 variants headless, each within 0.1 mm of its requested dimensions.",
+   "priority": "P3",
+   "assertions": [
+    {
+     "name": "graph exposes exactly 4 named inputs",
+     "passed": true,
+     "detail": "inputs=['Height', 'Length', 'Wall', 'Width']"
+    },
+    {
+     "name": "socket identifiers resolved from labels, not guessed",
+     "passed": true,
+     "detail": "map={'Length': 'Socket_1', 'Width': 'Socket_2', 'Height': 'Socket_3', 'Wall': 'Socket_4'}"
+    },
+    {
+     "name": "8 variants generated",
+     "passed": true,
+     "detail": "8 variants"
+    },
+    {
+     "name": "8 files written",
+     "passed": true,
+     "detail": "8 files in tests/output/t05"
+    },
+    {
+     "name": "every dimension within 0.1 mm of its parameter",
+     "passed": true,
+     "detail": "worst error 0.000048 mm across 8 variants"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-303",
+    "R-304",
+    "R-306"
+   ],
+   "seconds": 1.108476161956787
+  },
+  {
+   "id": "T-06",
+   "file": "t06_stl_mm_into_m_scene.py",
+   "task": "Import an STL authored in millimetres into a scene working in metres and land at the nominal size with scale applied.",
+   "priority": "P4",
+   "assertions": [
+    {
+     "name": "exactly one object imported",
+     "passed": true,
+     "detail": "imported ['part_mm']"
+    },
+    {
+     "name": "import put the conversion into object scale, not the mesh",
+     "passed": true,
+     "detail": "scale straight after import = (0.0010000000474974513, 0.0010000000474974513, 0.0010000000474974513)"
+    },
+    {
+     "name": "object scale is 1.0 after Apply Scale",
+     "passed": true,
+     "detail": "scale=(1.0, 1.0, 1.0)"
+    },
+    {
+     "name": "bounding box matches nominal within 0.01 mm",
+     "passed": true,
+     "detail": "nominal=(40.0, 25.0, 12.0) got=(40.0000, 25.0000, 12.0000) mm"
+    },
+    {
+     "name": "mesh is closed and manifold",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "scene unit scale left at 1.0 metre",
+     "passed": true,
+     "detail": "scale_length=1.0"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-401",
+    "R-403"
+   ],
+   "seconds": 1.0595934391021729
+  },
+  {
+   "id": "T-07",
+   "file": "t07_merge_by_distance.py",
+   "task": "Weld a solid assembled from abutting boxes using a tolerance-derived threshold, and show that welding alone does not make it solid.",
+   "priority": "P0",
+   "assertions": [
+    {
+     "name": "input had duplicate vertices",
+     "passed": true,
+     "detail": "duplicates=398"
+    },
+    {
+     "name": "input was many disconnected shells",
+     "passed": true,
+     "detail": "shells=73"
+    },
+    {
+     "name": "threshold is an order of magnitude below the smallest feature",
+     "passed": true,
+     "detail": "threshold=0.0001 smallest_feature=0.1"
+    },
+    {
+     "name": "duplicates removed",
+     "passed": true,
+     "detail": "duplicates=0"
+    },
+    {
+     "name": "vertex count actually dropped",
+     "passed": true,
+     "detail": "584 -> 186"
+    },
+    {
+     "name": "shells merged",
+     "passed": true,
+     "detail": "73 -> 1"
+    },
+    {
+     "name": "bounding box unchanged (no real detail lost)",
+     "passed": true,
+     "detail": "(0.9000000357627869, 0.10000000149011612, 1.0) -> (0.9000000357627869, 0.10000000149011612, 1.0)"
+    },
+    {
+     "name": "welding changed the enclosed volume, proving interior faces remain",
+     "passed": true,
+     "detail": "0.073000 -> 0.248333"
+    },
+    {
+     "name": "mesh is still not manifold after welding alone",
+     "passed": true,
+     "detail": "non_manifold=338 (interior walls survive; see T-08 for the remesh fix)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-103",
+    "R-101"
+   ],
+   "seconds": 0.8358385562896729
+  },
+  {
+   "id": "T-08",
+   "file": "t08_remesh_error_bound.py",
+   "task": "Voxel-remesh a badly-topologised solid at a declared voxel size and confirm the volume error stays inside the stated bound.",
+   "priority": "P0",
+   "assertions": [
+    {
+     "name": "input was multi-shell and self-intersecting",
+     "passed": true,
+     "detail": "shells=73 self_intersecting=543"
+    },
+    {
+     "name": "remesh produced a single shell",
+     "passed": true,
+     "detail": "shells=1"
+    },
+    {
+     "name": "result is manifold",
+     "passed": true,
+     "detail": "non_manifold=0 closed=True"
+    },
+    {
+     "name": "normals consistent and outward",
+     "passed": true,
+     "detail": "inconsistent=0 inward=False"
+    },
+    {
+     "name": "self-intersections eliminated",
+     "passed": true,
+     "detail": "self_intersecting=0"
+    },
+    {
+     "name": "volume error inside the declared bound",
+     "passed": true,
+     "detail": "0.073000 -> 0.071856 (1.57%, bound 10%)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-110",
+    "R-101"
+   ],
+   "seconds": 0.9857082366943359
+  },
+  {
+   "id": "T-09",
+   "file": "t09_feature_preserving_decimate.py",
+   "task": "Reduce a densely-tessellated prismatic part without rounding off its sharp edges, and show that collapse decimation would have.",
+   "priority": "P0",
+   "assertions": [
+    {
+     "name": "input was densely tessellated",
+     "passed": true,
+     "detail": "2700 tris"
+    },
+    {
+     "name": "planar decimation reduced the count substantially",
+     "passed": true,
+     "detail": "2700 -> 12 tris"
+    },
+    {
+     "name": "planar decimation preserved the bounding box exactly",
+     "passed": true,
+     "detail": "(1.0, 1.0, 1.0) -> (1.0, 1.0, 1.0)"
+    },
+    {
+     "name": "planar decimation preserved volume within 0.01%",
+     "passed": true,
+     "detail": "0.000000%"
+    },
+    {
+     "name": "planar result is still manifold",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "collapse at the same budget loses more volume (the antipattern)",
+     "passed": true,
+     "detail": "collapse=0.0000% vs planar=0.000000%"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-107",
+    "R-108"
+   ],
+   "seconds": 0.9654648303985596
+  },
+  {
+   "id": "T-10",
+   "file": "t10_measure_open_vs_closed.py",
+   "task": "Measure volume, area and centre of mass, and refuse to report volume for an open mesh.",
+   "priority": "P0",
+   "assertions": [
+    {
+     "name": "closed mesh reports a volume",
+     "passed": true,
+     "detail": "volume=1.570638622095493"
+    },
+    {
+     "name": "volume matches the analytic prism value within 0.01%",
+     "passed": true,
+     "detail": "expected=1.57063863 got=1.57063862"
+    },
+    {
+     "name": "surface area matches within 0.01%",
+     "passed": true,
+     "detail": "expected=7.85366623 got=7.85366656"
+    },
+    {
+     "name": "open mesh reports NO volume rather than a wrong number",
+     "passed": true,
+     "detail": "volume=None closed=False"
+    },
+    {
+     "name": "open mesh still reports a valid area",
+     "passed": true,
+     "detail": "area=6.283028"
+    },
+    {
+     "name": "centre of mass is on the axis of symmetry",
+     "passed": true,
+     "detail": "com=(1.565e-09, -3.090e-09, 7.589e-09)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-113",
+    "R-101"
+   ],
+   "seconds": 0.937615156173706
+  },
+  {
+   "id": "T-11",
+   "file": "t11_bevel_segments_from_tolerance.py",
+   "task": "Derive the bevel segment count from a stated deviation tolerance instead of guessing, and prove the resulting chord error.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "segment count was derived, not guessed",
+     "passed": true,
+     "detail": "n=10, predicted sagitta 0.018496 mm <= budget 0.0200 mm"
+    },
+    {
+     "name": "a 1-segment chamfer would have blown the budget",
+     "passed": true,
+     "detail": "1-segment sagitta 1.7574 mm"
+    },
+    {
+     "name": "measured deviation from the true arc is inside the budget",
+     "passed": true,
+     "detail": "measured 0.000000 mm <= 0.0200 mm"
+    },
+    {
+     "name": "result is manifold",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "no self-intersections from clamped bevel",
+     "passed": true,
+     "detail": "self_intersecting=0"
+    },
+    {
+     "name": "outer dimensions unchanged by filleting",
+     "passed": true,
+     "detail": "dimensions=(0.1, 0.1, 0.1)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-203",
+    "R-205"
+   ],
+   "seconds": 0.9145278930664062
+  },
+  {
+   "id": "T-12",
+   "file": "t12_cnc_dogbone_relief.py",
+   "task": "Cut a rectangular pocket and add dogbone relief so a 6 mm cutter can actually reach the corners.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "plain pocket matches nominal size exactly",
+     "passed": true,
+     "detail": "pocket floor extent (0.080000, 0.050000) vs nominal (0.08, 0.05)"
+    },
+    {
+     "name": "relieved pocket is larger at the corners",
+     "passed": true,
+     "detail": "grew x=1.7574 mm y=1.7574 mm"
+    },
+    {
+     "name": "relief growth matches the tool-radius geometry within 0.05 mm",
+     "passed": true,
+     "detail": "expected 1.7574 mm, got x=1.7574 y=1.7574"
+    },
+    {
+     "name": "relieved part is still manifold",
+     "passed": true,
+     "detail": "non_manifold=0 closed=True"
+    },
+    {
+     "name": "relief removed additional material",
+     "passed": true,
+     "detail": "plain=0.00023000 relieved=0.00022980"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-206",
+    "R-212"
+   ],
+   "seconds": 1.3070728778839111
+  },
+  {
+   "id": "T-13",
+   "file": "t13_architectural_mass.py",
+   "task": "Build a 4-storey mass from a dimensioned footprint and confirm every level lands within 1 mm of its nominal elevation.",
+   "priority": "P2",
+   "assertions": [
+    {
+     "name": "scene is metric at 1.0 unit scale",
+     "passed": true,
+     "detail": "METRIC scale=1.0"
+    },
+    {
+     "name": "footprint matches nominal within 1 mm",
+     "passed": true,
+     "detail": "measured (24.0000, 13.5000) vs nominal (24.0, 13.5)"
+    },
+    {
+     "name": "overall height matches nominal within 1 mm",
+     "passed": true,
+     "detail": "measured 9.9700 vs expected 9.9700"
+    },
+    {
+     "name": "all 4 storeys present",
+     "passed": true,
+     "detail": "shells=4"
+    },
+    {
+     "name": "every level elevation within 1 mm of nominal",
+     "passed": true,
+     "detail": "max elevation error 0.000000 mm"
+    },
+    {
+     "name": "mm precision retained at 24 m span",
+     "passed": true,
+     "detail": "span/tolerance ratio 24000, actual error 0.000e+00 m"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-215",
+    "R-217",
+    "R-001"
+   ],
+   "seconds": 0.9937520027160645
+  },
+  {
+   "id": "T-14",
+   "file": "t14_float_precision_budget.py",
+   "task": "Show that millimetre detail is destroyed at survey-grid coordinates and preserved when the same work happens in a local frame.",
+   "priority": "P2",
+   "assertions": [
+    {
+     "name": "the scene exceeds the 1e6 precision-budget threshold",
+     "passed": true,
+     "detail": "extent/detail = 6.00e+08"
+    },
+    {
+     "name": "detail authored at grid coordinates loses precision",
+     "passed": true,
+     "detail": "1 mm feature measured with 1.000000 mm error at x=600000 m"
+    },
+    {
+     "name": "detail authored at the origin keeps full precision",
+     "passed": true,
+     "detail": "error 0.0725 um at the origin (float32 storage floor, not a modelling error)"
+    },
+    {
+     "name": "the local frame is measurably better",
+     "passed": true,
+     "detail": "local 7.248e-08 vs global 1.000e-03 m"
+    },
+    {
+     "name": "the object still sits at the right world position",
+     "passed": true,
+     "detail": "world x = 600000.000"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-003",
+    "R-001"
+   ],
+   "seconds": 0.9524586200714111
+  },
+  {
+   "id": "T-15",
+   "file": "t15_array_exact_spacing.py",
+   "task": "Array a column on a 7.2 m structural grid and confirm every bay centre lands within 0.1 mm of nominal.",
+   "priority": "P2",
+   "assertions": [
+    {
+     "name": "constant offset used, not relative",
+     "passed": true,
+     "detail": "constant=True relative=False"
+    },
+    {
+     "name": "correct number of bays",
+     "passed": true,
+     "detail": "12 X planes, expected 12"
+    },
+    {
+     "name": "every grid line within 0.1 mm",
+     "passed": true,
+     "detail": "max grid error 0.002000 mm"
+    },
+    {
+     "name": "overall length matches nominal",
+     "passed": true,
+     "detail": "measured 36.4000 expected 36.4000"
+    },
+    {
+     "name": "last bay centre is exactly 5 x 7.2 m from the first",
+     "passed": true,
+     "detail": "span 36.000001 vs 36.000000"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-217",
+    "R-001"
+   ],
+   "seconds": 0.865065336227417
+  },
+  {
+   "id": "T-16",
+   "file": "t16_socket_identifier_api.py",
+   "task": "Resolve modifier inputs by label at runtime and confirm the 4.x dict-style socket access no longer works in 5.2.",
+   "priority": "P3",
+   "assertions": [
+    {
+     "name": "legacy dict-style READ raises in 5.2",
+     "passed": true,
+     "detail": "raised TypeError"
+    },
+    {
+     "name": "legacy dict-style WRITE raises in 5.2",
+     "passed": true,
+     "detail": "raised TypeError"
+    },
+    {
+     "name": "modifier.keys() raises in 5.2",
+     "passed": true,
+     "detail": "raised TypeError"
+    },
+    {
+     "name": "properties.inputs.<identifier>.value reads back the set value",
+     "passed": true,
+     "detail": "readback=0.75"
+    },
+    {
+     "name": "the set value actually drives evaluated geometry",
+     "passed": true,
+     "detail": "evaluated X=0.750000"
+    },
+    {
+     "name": "labels re-resolve to identifiers at runtime",
+     "passed": true,
+     "detail": "{'Length': 'Socket_1', 'Width': 'Socket_2', 'Height': 'Socket_3', 'Wall': 'Socket_4'}"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-303"
+   ],
+   "seconds": 0.9168312549591064
+  },
+  {
+   "id": "T-17",
+   "file": "t17_driver_dimension_link.py",
+   "task": "Drive a shelf's depth from a control object's custom property so a single edit propagates, with no retyped numbers.",
+   "priority": "P3",
+   "assertions": [
+    {
+     "name": "driver resolves on first evaluation",
+     "passed": true,
+     "detail": "expected 0.582000 got 0.582000"
+    },
+    {
+     "name": "changing the control property propagates automatically",
+     "passed": true,
+     "detail": "expected 0.762000 got 0.762000"
+    },
+    {
+     "name": "no other dimension moved",
+     "passed": true,
+     "detail": "(1.0, 0.582, 1.0) -> (1.0, 0.762, 1.0)"
+    },
+    {
+     "name": "the driving value lives on the CTRL object, not in the mesh",
+     "passed": true,
+     "detail": "CTRL-Cabinet keys=['depth', 'wall']"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-301",
+    "R-302"
+   ],
+   "seconds": 1.2410545349121094
+  },
+  {
+   "id": "T-18",
+   "file": "t18_export_roundtrip.py",
+   "task": "Export to STL and OBJ, reimport into a clean scene, and confirm bounding box and volume survive within tolerance.",
+   "priority": "P4",
+   "assertions": [
+    {
+     "name": "export files were actually written",
+     "passed": true,
+     "detail": "stl=9484B obj=6295B"
+    },
+    {
+     "name": "stl: bounding box survives the round trip",
+     "passed": true,
+     "detail": "max dim error 0.000e+00 m"
+    },
+    {
+     "name": "stl: volume survives the round trip",
+     "passed": true,
+     "detail": "0.01190399 -> 0.01190399 (0.000000%)"
+    },
+    {
+     "name": "stl: still manifold after the round trip",
+     "passed": true,
+     "detail": "non_manifold=0"
+    },
+    {
+     "name": "obj: bounding box survives the round trip",
+     "passed": true,
+     "detail": "max dim error 0.000e+00 m"
+    },
+    {
+     "name": "obj: volume survives the round trip",
+     "passed": true,
+     "detail": "0.01190399 -> 0.01190400 (0.000119%)"
+    },
+    {
+     "name": "obj: still manifold after the round trip",
+     "passed": true,
+     "detail": "non_manifold=0"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-402",
+    "R-405"
+   ],
+   "seconds": 1.0310592651367188
+  },
+  {
+   "id": "T-19",
+   "file": "t19_axis_convention.py",
+   "task": "Show that exporting and reimporting OBJ with the operator defaults silently rotates the part, and that Blender-native axes do not.",
+   "priority": "P4",
+   "assertions": [
+    {
+     "name": "the test part is asymmetric enough to detect a swap",
+     "passed": true,
+     "detail": "dimensions=(0.1, 0.2, 0.4)"
+    },
+    {
+     "name": "operator DEFAULTS silently rotate the part on a round trip",
+     "passed": true,
+     "detail": "(0.1, 0.2, 0.4) -> (0.1, 0.4, 0.2) using the documented defaults (forward=NEGATIVE_Z, up=Y) on both sides"
+    },
+    {
+     "name": "the default round trip is a rotation, not a rescale",
+     "passed": true,
+     "detail": "sorted [0.1, 0.2, 0.4] == sorted [0.1, 0.2, 0.4]"
+    },
+    {
+     "name": "Blender-native axes (forward=Y, up=Z) round-trip exactly",
+     "passed": true,
+     "detail": "(0.1, 0.2, 0.4) -> (0.1, 0.2, 0.4)"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-404",
+    "R-402"
+   ],
+   "seconds": 1.1632320880889893
+  },
+  {
+   "id": "T-20",
+   "file": "t20_w000_full_process.py",
+   "task": "Model to a brief with a stated tolerance and variable parameters, passing gates G1-G4 with numeric evidence at each.",
+   "priority": "W-000",
+   "assertions": [
+    {
+     "name": "Phase 0: brief is complete before any modelling",
+     "passed": true,
+     "detail": "tolerance=0.5 mm, consumer=3-axis CNC router, STL in metres, Z up"
+    },
+    {
+     "name": "G1: units, unit scale, applied scale, file saved",
+     "passed": true,
+     "detail": "system=METRIC scale=1.0 unapplied=[] saved=True"
+    },
+    {
+     "name": "G2: blockout matches the nominal dimension table",
+     "passed": true,
+     "detail": "worst error 0.000012 mm <= 0.5 mm; measured (0.4, 0.3, 0.06)"
+    },
+    {
+     "name": "Phase 4: modifier stack in canonical order",
+     "passed": true,
+     "detail": "stack=['BOOLEAN', 'BEVEL'] hard_violations=[]"
+    },
+    {
+     "name": "G3: manifold, clean, no self-intersections",
+     "passed": true,
+     "detail": "problems=[] volume=0.00316096"
+    },
+    {
+     "name": "Phase 6: unbaked copy preserved before export",
+     "passed": true,
+     "detail": "objects=['CTRL-Tray', 'Cavity', 'Tray', 'Tray_unbaked']"
+    },
+    {
+     "name": "G4: round trip within the Phase 0 tolerance",
+     "passed": true,
+     "detail": "dim error 0.000000 mm <= 0.5 mm; (0.4, 0.3, 0.06) -> (0.4, 0.3, 0.06)"
+    },
+    {
+     "name": "all four gates produced a numeric result",
+     "passed": true,
+     "detail": "G1/G2/G3/G4 each returned a measurement report"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "W-000",
+    "R-001",
+    "R-007"
+   ],
+   "seconds": 1.0870671272277832
+  },
+  {
+   "id": "T-21",
+   "file": "t21_parameter_change_propagates.py",
+   "task": "After the model is finished, change one driving parameter by 30 percent and confirm it recomputes with no manual mesh editing, and that G3 still passes.",
+   "priority": "W-000",
+   "assertions": [
+    {
+     "name": "model starts at the nominal length",
+     "passed": true,
+     "detail": "measured 0.400000 expected 0.4"
+    },
+    {
+     "name": "30 percent parameter change propagates to geometry",
+     "passed": true,
+     "detail": "measured 0.520000 expected 0.520000"
+    },
+    {
+     "name": "no other dimension moved",
+     "passed": true,
+     "detail": "(0.4, 0.3, 0.06) -> (0.52, 0.3, 0.06)"
+    },
+    {
+     "name": "the base mesh was never hand-edited",
+     "passed": true,
+     "detail": "base mesh vertices 0 -> 0 (all geometry comes from the graph)"
+    },
+    {
+     "name": "G3 still passes after the change",
+     "passed": true,
+     "detail": "problems=[]"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "W-000",
+    "R-303",
+    "R-304"
+   ],
+   "seconds": 0.9024207592010498
+  },
+  {
+   "id": "T-22",
+   "file": "t22_missing_units_must_ask.py",
+   "task": "Given a brief that omits units, confirm the skill instructs asking rather than defaulting, and show what the wrong assumption costs.",
+   "priority": "W-000",
+   "assertions": [
+    {
+     "name": "Phase 0 explicitly asks for tolerance and nominal unit",
+     "passed": true,
+     "detail": "core SKILL.md Phase 0 interview table"
+    },
+    {
+     "name": "the skill instructs asking rather than assuming",
+     "passed": true,
+     "detail": "found the 'ask, do not guess' rule in W-000 Phase 0"
+    },
+    {
+     "name": "the skill states a wrong tolerance assumption is unrecoverable",
+     "passed": true,
+     "detail": "W-000 Phase 0 calls such a model scrap rather than a fixable draft"
+    },
+    {
+     "name": "guessing the unit costs a factor of 1000, not a rounding error",
+     "passed": true,
+     "detail": "same brief '40' -> 0.040 m if mm, 40.0 m if m (x1000)"
+    },
+    {
+     "name": "no silent default of metres is offered anywhere in Phase 0",
+     "passed": true,
+     "detail": "core SKILL.md contains no instruction to default the unit"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "W-000"
+   ],
+   "seconds": 0.9276154041290283
+  },
+  {
+   "id": "T-23",
+   "file": "t23_stack_order_violation.py",
+   "task": "Given a stack with Bevel before Boolean, detect the violation, correct it, and demonstrate that the order genuinely changes the result rather than being a style preference.",
+   "priority": "W-000",
+   "assertions": [
+    {
+     "name": "the briefed stack is detected as a hard violation",
+     "passed": true,
+     "detail": "stack=['BEVEL', 'BOOLEAN'] violation=BEVEL before BOOLEAN"
+    },
+    {
+     "name": "the violation is reported with a reason, not just a flag",
+     "passed": true,
+     "detail": "Boolean must precede Bevel, or the new cut edges are left sharp."
+    },
+    {
+     "name": "reordering fixes the violation",
+     "passed": true,
+     "detail": "corrected stack=['BOOLEAN', 'BEVEL']"
+    },
+    {
+     "name": "Boolean now precedes Bevel",
+     "passed": true,
+     "detail": "['BOOLEAN', 'BEVEL']"
+    },
+    {
+     "name": "order genuinely changes the geometry (cut edges left sharp)",
+     "passed": true,
+     "detail": "sharp edges: bevel-first=96, boolean-first=0"
+    },
+    {
+     "name": "the corrected stack matches an independently built correct one",
+     "passed": true,
+     "detail": "corrected=0 independent=0"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "W-000",
+    "R-206",
+    "R-203"
+   ],
+   "seconds": 1.0327255725860596
+  },
+  {
+   "id": "T-24",
+   "file": "t24_ortho_paper_scale.py",
+   "task": "Set up an orthographic elevation at a true 1:50 paper scale and prove the rendered image measures correctly.",
+   "priority": "DRAW",
+   "assertions": [
+    {
+     "name": "camera is orthographic, not perspective",
+     "passed": true,
+     "detail": "type=ORTHO"
+    },
+    {
+     "name": "ortho_scale derived from paper size and scale denominator",
+     "passed": true,
+     "detail": "ortho_scale=14.850000381469727 = 297.0mm x 50 / 1000"
+    },
+    {
+     "name": "render resolution matches the declared DPI",
+     "passed": true,
+     "detail": "3508 px = 297.0mm at 300 dpi"
+    },
+    {
+     "name": "image was actually written",
+     "passed": true,
+     "detail": "/home/user/claude-blender-modelling-skill/tests/output/t24/elevation.png"
+    },
+    {
+     "name": "the drawn building measures 200 mm on paper within 1 mm",
+     "passed": true,
+     "detail": "expected 200.00 mm, measured 199.98 mm"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-501",
+    "R-503"
+   ],
+   "seconds": 24.687745094299316
+  },
+  {
+   "id": "T-25",
+   "file": "t25_section_and_annotation.py",
+   "task": "Cut a section from a duplicate, annotate it with dimensions read from the geometry, and show the annotation goes stale unless re-run.",
+   "priority": "DRAW",
+   "assertions": [
+    {
+     "name": "section was cut from a duplicate, master untouched",
+     "passed": true,
+     "detail": "master volume 3.37500006 -> 3.37500006"
+    },
+    {
+     "name": "section is shorter than the full wall",
+     "passed": true,
+     "detail": "section height 2.5500 vs wall 2.7000"
+    },
+    {
+     "name": "section cut landed at the requested elevation",
+     "passed": true,
+     "detail": "section top 1.200000 vs requested 1.2"
+    },
+    {
+     "name": "annotation text was measured from geometry, not typed",
+     "passed": true,
+     "detail": "generated 'SEC 5000 x 2550'"
+    },
+    {
+     "name": "annotation is NOT associative: it goes stale after a model change",
+     "passed": true,
+     "detail": "model height changed to 3.000 m but the text still reads 'SEC 5000 x 2550'"
+    },
+    {
+     "name": "re-running the measurement produces the corrected text",
+     "passed": true,
+     "detail": "re-measured 'REV 5000 x 3000'"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-502",
+    "R-505"
+   ],
+   "seconds": 0.9082028865814209
+  },
+  {
+   "id": "T-99",
+   "file": "t99_negative_capability.py",
+   "task": "Confirm the skill refuses impossible CAD requests by name instead of inventing an operator, and that no identifier anywhere is fabricated.",
+   "priority": "NEG",
+   "assertions": [
+    {
+     "name": "D-99 names every impossible request explicitly",
+     "passed": true,
+     "detail": "all 9 listed"
+    },
+    {
+     "name": "every refusal offers a concrete alternative workflow",
+     "passed": true,
+     "detail": "9/9 rows carry a workaround"
+    },
+    {
+     "name": "the absent Bevel node is proven absent AND documented",
+     "passed": true,
+     "detail": "dump records: 'Error: Node type GeometryNodeBevel undefined\\n'"
+    },
+    {
+     "name": "identifier validator reports zero unknown identifiers",
+     "passed": true,
+     "detail": "OK: 0 unknown identifiers."
+    },
+    {
+     "name": "no invented operator is offered as a workaround",
+     "passed": true,
+     "detail": "none"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "D-99"
+   ],
+   "seconds": 1.703587532043457
+  }
+ ],
+ "passed": 26,
+ "total": 26
+}
