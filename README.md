@@ -9,7 +9,7 @@ LTS build (`fbe6228777e7`, Python 3.13.13) and is checked on every run by an
 automated validator. See [`VERIFICATION.md`](VERIFICATION.md) for what was
 executed and — equally important — what was not.
 
-**26/26 acceptance cases pass, 151 numeric assertions. 0 unknown identifiers.**
+**27/27 acceptance cases pass, 159 numeric assertions. 0 unknown identifiers.**
 
 ## What this is for
 
@@ -65,8 +65,9 @@ and similar.
 ## Requirements
 
 - **Blender 5.2 LTS.** Not "5.x" — the Geometry Nodes modifier input API broke
-  between 5.1 and 5.2 (see `VERIFICATION.md`, finding 2). 4.5 LTS differences
-  are marked `COMPAT-4.5` where they appear.
+  between 5.1 and 5.2 (see `VERIFICATION.md`, finding 2). This skill targets
+  5.2 only; the 4.x → 5.2 breaking changes are listed in `VERIFICATION.md`'s
+  migration table, and nothing here is verified against 4.5 LTS.
 - Python 3.13 (bundled with Blender).
 - Optional: the [Blender Lab MCP server](https://projects.blender.org/lab/blender_mcp)
   for direct control. Skills degrade cleanly to emitting `bpy` scripts.
@@ -74,7 +75,7 @@ and similar.
 ## Running the tests
 
 ```bash
-python3 tests/run_evals.py                      # all 26 cases
+python3 tests/run_evals.py                      # all 27 cases
 python3 tests/run_evals.py --only T-01 T-99     # selected
 python3 tests/run_evals.py --json report.json   # machine-readable
 ```

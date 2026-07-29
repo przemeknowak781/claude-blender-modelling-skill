@@ -45,6 +45,33 @@ bpy.context.evaluated_depsgraph_get().update()
 Without `ctrl.update_tag()` the driver returns the previous value and raises
 nothing. T-17 failed on exactly this before the tag was added.
 
+## R-302: one control object driving many objects
+
+```python
+ctrl = bpy.data.objects.new("CTRL-Cabinet", None)
+bpy.context.scene.collection.objects.link(ctrl)
+ctrl["depth"] = 0.600
+
+for panel in panels:                       # every panel reads the same source
+    fc = panel.driver_add("scale", 1)
+    var = fc.driver.variables.new()
+    var.name, var.type = "d", 'SINGLE_PROP'
+    var.targets[0].id = ctrl
+    var.targets[0].data_path = '["depth"]'
+    fc.driver.expression = "d"
+```
+
+**When NOT to use:** when the objects need *different* functions of the same
+source — that still works, but put the arithmetic in each expression rather
+than adding more control properties.
+
+**Verify:** change `ctrl["depth"]`, tag `ctrl` (see the update trap above), and
+assert every dependent object moved. T-17 asserts propagation and that no
+unrelated axis moved.
+
+**Common mistakes:** putting the control properties on a mesh object that later
+gets its scale applied or gets deleted during cleanup. Use an Empty.
+
 ## Driver or graph input?
 
 | Situation | Use |

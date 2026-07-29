@@ -41,7 +41,7 @@ in the file's decision log (R-005).
 demonstrates the cost of guessing: the bare number `40` is either 0.040 m or
 40 m — a factor of 1000, discovered at the machine, not in the viewport.
 
-## Gate G1 — scene setup
+## R-007: Gate G1 — scene setup
 
 ```python
 import gates

@@ -104,6 +104,70 @@ for value in (0.5, 2.0, 3.25):
 A graph that builds without error but ignores your input is the characteristic
 failure here, and it raises nothing.
 
+## R-305: per-object variants sharing one node group
+
+```python
+for name, length in (("PartA", 0.4), ("PartB", 0.6)):
+    obj = bpy.data.objects.new(name, bpy.data.meshes.new(name))
+    bpy.context.scene.collection.objects.link(obj)
+    mod = obj.modifiers.new(name="GN", type='NODES')
+    mod.node_group = shared_group          # ONE group, many objects
+    getattr(mod.properties.inputs, ident["Length"]).value = length
+```
+
+Modifier input values live on the **modifier**, not on the node group, so one
+group can drive any number of differently-dimensioned objects. Editing the
+group changes all of them; editing a modifier input changes one.
+
+**When NOT to use:** when variants differ *structurally* rather than
+numerically — then they need different graphs, not different inputs.
+
+**Verify:** evaluate each object and assert its own dimensions (R-306's loop).
+
+## R-308: bake graph output, keeping the parametric original
+
+```python
+unbaked = obj.copy()
+unbaked.data = obj.data.copy()
+unbaked.name = f"{obj.name}_unbaked"
+bpy.context.scene.collection.objects.link(unbaked)
+
+with bpy.context.temp_override(object=obj):
+    bpy.ops.object.modifier_apply(modifier="GN")
+```
+
+`modifier_apply` is context-sensitive, so it needs the override in a script.
+This is one of the few places `bpy.ops` is unavoidable.
+
+**When NOT to use:** before gate G4. Keep the graph until the round trip
+passes; applying early throws away the only thing that can regenerate the part.
+
+**Verify:** the baked object's dimensions and volume match the evaluated
+pre-bake values, and `f"{obj.name}_unbaked"` exists.
+
+**Common mistakes:** `obj.copy()` without `obj.data.copy()` — both objects then
+share one mesh and applying to one wrecks the other.
+
+## R-309: debug a graph that outputs nothing
+
+Work down this list; each step is a single change with a single check.
+
+1. **Is the group linked?** `mod.node_group is not None`.
+2. **Is the output socket connected?** An unconnected Group Output produces
+   empty geometry with no error.
+3. **Read `mod.node_warnings`** — the modifier exposes the warnings the UI
+   shows in its panel.
+4. **Is the input value what you think?**
+   `getattr(mod.properties.inputs, ident[label]).value` — a value silently left
+   at its default is the commonest cause.
+5. **Did you force evaluation?** `obj.update_tag()` then
+   `bpy.context.evaluated_depsgraph_get().update()`.
+6. **Are you measuring the evaluated object?** `obj.data` is the base mesh and
+   is legitimately empty for a graph-generated part (T-21 asserts exactly that:
+   0 base vertices, full evaluated geometry).
+7. **Are instances realised?** Instanced geometry needs
+   `GeometryNodeRealizeInstances` before most exporters see it.
+
 ## Enum traps
 
 `bl_rna` enum lists are a **superset** of what a node accepts.

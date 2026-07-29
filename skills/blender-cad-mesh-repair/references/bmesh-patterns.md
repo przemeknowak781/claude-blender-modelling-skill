@@ -91,9 +91,68 @@ bmesh.ops.delete(bm, geom=doomed, context='FACES')
 Ranking by face count suits solver debris. Rank by `sum(f.calc_area())` or by
 per-shell volume when the largest body is not the one with most faces.
 
+## R-104: fill boundary holes
+
+```python
+bmesh.ops.holes_fill(bm, edges=cadlib.boundary_edges(bm), sides=0)
+```
+
+`sides=0` means "no limit on hole size"; set it to bound how large a hole is
+allowed to be filled, so a genuinely open surface is not accidentally capped.
+
+**When NOT to use:** on a surface that is *meant* to be open (T-02's input is
+an open surface by design), or on large curved openings, where the flat fill
+is worse than the hole. Remesh (R-110) instead.
+
+**Verify:** `cadlib.is_closed(bm)` becomes True and the bounding box does not
+change — a fill that moves the bbox has bridged something it should not have.
+
 ## R-111 / R-112: self-intersection
 
-Detect with `cadlib.self_intersecting_face_count(bm)`. To resolve, a voxel
-remesh (R-110) is the blunt, reliable instrument — T-08 takes a fixture with
-543 self-intersecting faces to 0 while keeping volume within the declared
-bound.
+**R-111, detect:** `cadlib.self_intersecting_face_count(bm)`.
+
+**R-112, resolve.** A voxel remesh (R-110) is the blunt, reliable instrument —
+T-08 takes a fixture with 543 self-intersecting faces to 0 while keeping volume
+within the declared bound. The alternative, an `EXACT` self-union, resolves the
+crossings without rebuilding the whole surface:
+
+```python
+# Self-union: the object booleaned against a copy of itself.
+dup = obj.copy()
+dup.data = obj.data.copy()
+bpy.context.scene.collection.objects.link(dup)
+mod = obj.modifiers.new(name="SelfUnion", type='BOOLEAN')
+mod.operation = 'UNION'
+mod.solver = 'EXACT'
+mod.object = dup
+```
+
+**When NOT to use:** on meshes with many shells that are *supposed* to stay
+separate — the union merges them. Split first (R-106).
+
+**Verify:** `self_intersecting_face_count` drops to 0 **and** volume is
+unchanged within tolerance. A self-union that changed the volume has merged
+shells you wanted kept.
+
+## R-113: measure volume, area and centre of mass
+
+```python
+bm = cadlib.evaluated_bmesh(obj)
+closed = cadlib.is_closed(bm)
+vol  = cadlib.volume(bm) if closed else None      # None, not a wrong number
+area = cadlib.surface_area(bm)
+com  = cadlib.centre_of_mass(bm)
+bm.free()
+```
+
+**When NOT to use:** never report a volume for an open mesh. T-10 asserts the
+harness returns `None` rather than the meaningless number `calc_volume` would
+happily produce.
+
+**Verify:** against an analytic value where one exists. T-10 checks a 256-gon
+prism against the polygon area and perimeter formulae and matches to better
+than 0.01 percent, which is what makes the harness itself trustworthy.
+
+Note `centre_of_mass` here is the **area-weighted centroid of the surface**,
+not the centre of mass of a solid body of uniform density. For a closed convex
+solid they coincide; in general they do not. Say which one you mean.

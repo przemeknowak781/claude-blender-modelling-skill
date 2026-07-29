@@ -15,9 +15,12 @@ architecture (P2). Assumes W-000 Phase 1 has passed gate G1.
 
 - A `BEVEL` radius is a chord approximation. Segment count sets deviation; the
   formula and a segment-count table are in `references/bevel-and-chamfer.md`.
-- `SOLIDIFY` cannot produce a valid offset where the surface has concave
-  curvature tighter than the thickness. It will self-intersect. This is
-  geometry, not a bug — detect it, do not paper over it.
+- `SOLIDIFY` cannot produce a valid offset where the surface folds more
+  tightly than the thickness. **Verified (T-26): it does not self-intersect —
+  it spikes.** The offset apex overshoots by `t / tan(theta/2)`, so a 15-degree
+  fold given an 18 mm wall grows 138 mm, while the result stays closed,
+  manifold and self-intersection-free. Every topology check passes. Detect it
+  before the modifier with R-202; a G3-style topology gate will not catch it.
 - Boolean results are only as good as their inputs. Coplanar faces and
   non-manifold cutters produce unstable output regardless of solver.
 - Blender has no tool-path generation. Tool-radius compensation here means
@@ -44,7 +47,7 @@ inspect → ground → mutate → verify, with dimensional assertions:
 ```
 Need thickness on a surface?
   ├─ closed/clean surface, uniform t     → R-201 (SOLIDIFY, NON_MANIFOLD mode)
-  ├─ concave radius < t anywhere         → R-202 (detect first; then redesign or clamp t)
+  ├─ any concave fold tighter than t     → R-202 (detect FIRST; then redesign or reduce t)
   └─ must stay parametric in a graph     → parametric skill, Extrude Mesh + Flip Faces
 Need a rounded or chamfered edge?
   ├─ uniform, all edges                  → R-203 (BEVEL, angle limit)
@@ -95,8 +98,10 @@ Architectural?
    Clamp with `use_clamp_overlap`.
 3. Bevel before Boolean → cut edges left sharp. Follow the W-000 stack order.
 4. Mirror after Bevel → bevel crosses the mirror plane. Mirror first.
-5. Solidify on a surface with tight concavity → self-intersection that only
-   appears after export. Run R-202.
+5. Solidify on a tightly folded surface → a spike, not a self-intersection.
+   The part is grossly oversize yet passes manifold, closed and
+   self-intersection checks, so only a *dimensional* check catches it. Run
+   R-202 before the modifier (T-26).
 6. Measuring the base mesh instead of the evaluated mesh → modifiers invisible
    to your assertions, which then pass falsely.
 7. Modelling internal corners a round cutter cannot reach → part does not fit.
@@ -113,6 +118,7 @@ Architectural?
 
 | File | Load when |
 | --- | --- |
+| `references/solidify-and-offset.md` | thickness, offset, feasibility of an offset |
 | `references/bevel-and-chamfer.md` | radius, segments, deviation, weights, harden normals |
 | `references/boolean-practice.md` | solver choice, coplanarity, validation protocol |
 | `references/sheet-materials.md` | plywood, joints, kerf, nesting, CNC clearances |

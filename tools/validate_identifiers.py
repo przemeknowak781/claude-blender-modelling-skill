@@ -75,7 +75,10 @@ def main():
 
     known_nodes = {k for k, v in dump["nodes"].items()
                    if "__error__" not in v}
-    known_ops = set(dump["operators"])
+    # Only operators that actually resolved. An entry carrying __error__ means
+    # the harvest could not find it, so it must NOT count as verified.
+    known_ops = {k for k, val in dump["operators"].items()
+                 if not (isinstance(val, dict) and "__error__" in val)}
     known_mods = {k for k, v in dump["modifiers"].items()
                   if "__error__" not in v}
     known_bmesh = set(dump["bmesh_ops"])

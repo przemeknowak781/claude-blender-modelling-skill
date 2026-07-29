@@ -284,3 +284,48 @@ def format_report(rep):
             v = "(" + ", ".join(f"{c:.6g}" for c in v) + ")"
         lines.append(f"  {k:24s} {v}")
     return "\n".join(lines)
+
+
+# --------------------------------------------------------------------------
+# offset feasibility (R-202)
+# --------------------------------------------------------------------------
+def concave_offset_conflicts(obj, thickness):
+    """Concave folds too tight to survive an inward offset of *thickness*.
+
+    Offsetting both faces of a concave fold inward by t makes them meet at
+    ``t / tan(theta/2)`` from the shared edge, where theta is the interior
+    angle. If either face does not extend that far, the offset surface runs
+    past it and self-intersects. Solidify will not warn you; it just produces
+    inverted geometry that survives to the exporter.
+
+    Returns a list of (edge_index, interior_angle_deg, required_reach, actual).
+
+    NOTE on the sign convention: ``calc_face_angle_signed`` returns the
+    deviation from flat, not the interior angle, and NEGATIVE means concave.
+    Interior angle is ``pi - abs(signed)``.
+    """
+    import math
+
+    bm = evaluated_bmesh(obj)
+    bm.normal_update()
+    out = []
+    for e in bm.edges:
+        if len(e.link_faces) != 2:
+            continue
+        signed = e.calc_face_angle_signed(0.0)
+        if signed >= 0:                       # convex or flat: no conflict
+            continue
+        interior = math.pi - abs(signed)
+        if interior <= 1e-6:
+            continue
+        reach = thickness / math.tan(interior / 2.0)
+        origin = e.verts[0].co
+        along = (e.verts[1].co - origin).normalized()
+        for f in e.link_faces:
+            far = max((v.co - origin - along * ((v.co - origin).dot(along))).length
+                      for v in f.verts)
+            if far < reach:
+                out.append((e.index, math.degrees(interior), reach, far))
+                break
+    bm.free()
+    return out

@@ -98,6 +98,7 @@ Anything exported?
 | File | Load when |
 | --- | --- |
 | `references/units-and-axes.md` | any unit or orientation question |
+| `references/export-recipes.md` | exporting for print, CAM, FEA, USD/glTF, DXF/SVG |
 | `references/format-matrix.md` | choosing a format; what each one preserves |
 | `references/step-and-cad-exchange.md` | STEP/IGES/Rhino/IFC questions; ecosystem status |
 | `references/roundtrip-harness.md` | the reusable round-trip verification code |

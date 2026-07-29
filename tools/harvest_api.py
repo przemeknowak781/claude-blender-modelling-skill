@@ -76,7 +76,8 @@ OPERATORS = [
     ('object', 'parent_set'), ('object', 'delete'),
     ('mesh', 'select_mode'), ('mesh', 'edge_split'),
     ('wm', 'ply_export'), ('wm', 'usd_export'), ('wm', 'usd_import'),
-    ('wm', 'gpencil_import_svg'),
+    ('wm', 'grease_pencil_export_svg'), ('wm', 'grease_pencil_export_pdf'),
+    ('wm', 'grease_pencil_import_svg'), ('import_curve', 'svg'),
     ('export_scene', 'gltf'), ('import_scene', 'gltf'),
     ('render', 'render'), ('render', 'opengl'),
 ]

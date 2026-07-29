@@ -10,6 +10,36 @@ verified_by: "T-06, T-18, T-19"
 Two silent corrupters. Neither is visible in the viewport, and both are caught
 only by a round trip.
 
+## R-401: import a mesh with explicit units and axes
+
+```python
+before = set(bpy.data.objects.keys())
+bpy.ops.wm.stl_import(filepath=path, global_scale=0.001,      # mm source
+                      forward_axis='Y', up_axis='Z')
+obj = [o for o in bpy.data.objects if o.name not in before][0]
+```
+
+Capture the object by **diffing the object set**, not by assuming a name — the
+importer names from the file and may deduplicate against existing names.
+
+**When NOT to use:** as a substitute for asking. If nobody stated the source
+units, ask (W-000 Phase 0); the difference is a factor of 1000.
+
+**Verify:** apply scale (R-403), then assert the bounding box against the
+nominal size and `rep["manifold"]`. Then send it to `blender-cad-mesh-repair` —
+imported geometry is unvalidated by definition.
+
+## R-403: reconcile millimetre source data with a metre scene
+
+See "STL global_scale writes to OBJECT SCALE" below: import with
+`global_scale=0.001`, then **apply the scale**, then assert. T-06 asserts both
+halves — that the importer left `scale = 0.001`, and that it is 1.0 after Apply.
+
+## R-404: set the axis convention deliberately
+
+See "The OBJ defaults do NOT round-trip" below. State both axes on every import
+and export call. An unstated default is a decision you did not make.
+
 ## Verified operator defaults in 5.2
 
 | Operator | `forward_axis` | `up_axis` | `global_scale` |

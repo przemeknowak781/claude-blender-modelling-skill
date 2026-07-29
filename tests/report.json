@@ -62,7 +62,7 @@
     "R-106",
     "R-107"
    ],
-   "seconds": 140.7821023464203
+   "seconds": 77.19124674797058
   },
   {
    "id": "T-02",
@@ -111,7 +111,7 @@
     "R-201",
     "R-202"
    ],
-   "seconds": 1.2105000019073486
+   "seconds": 0.7372503280639648
   },
   {
    "id": "T-03",
@@ -155,7 +155,7 @@
     "R-206",
     "R-207"
    ],
-   "seconds": 1.1080520153045654
+   "seconds": 0.9866161346435547
   },
   {
    "id": "T-04",
@@ -184,7 +184,7 @@
     "R-216",
     "R-409"
    ],
-   "seconds": 1.0371301174163818
+   "seconds": 0.7762420177459717
   },
   {
    "id": "T-05",
@@ -224,7 +224,7 @@
     "R-304",
     "R-306"
    ],
-   "seconds": 1.108476161956787
+   "seconds": 0.9258809089660645
   },
   {
    "id": "T-06",
@@ -268,7 +268,7 @@
     "R-401",
     "R-403"
    ],
-   "seconds": 1.0595934391021729
+   "seconds": 0.672457218170166
   },
   {
    "id": "T-07",
@@ -327,7 +327,7 @@
     "R-103",
     "R-101"
    ],
-   "seconds": 0.8358385562896729
+   "seconds": 0.6384682655334473
   },
   {
    "id": "T-08",
@@ -371,7 +371,7 @@
     "R-110",
     "R-101"
    ],
-   "seconds": 0.9857082366943359
+   "seconds": 0.8153464794158936
   },
   {
    "id": "T-09",
@@ -415,7 +415,7 @@
     "R-107",
     "R-108"
    ],
-   "seconds": 0.9654648303985596
+   "seconds": 0.7276628017425537
   },
   {
    "id": "T-10",
@@ -459,7 +459,7 @@
     "R-113",
     "R-101"
    ],
-   "seconds": 0.937615156173706
+   "seconds": 0.6821973323822021
   },
   {
    "id": "T-11",
@@ -503,7 +503,7 @@
     "R-203",
     "R-205"
    ],
-   "seconds": 0.9145278930664062
+   "seconds": 0.6894502639770508
   },
   {
    "id": "T-12",
@@ -542,7 +542,7 @@
     "R-206",
     "R-212"
    ],
-   "seconds": 1.3070728778839111
+   "seconds": 1.0027823448181152
   },
   {
    "id": "T-13",
@@ -587,7 +587,7 @@
     "R-217",
     "R-001"
    ],
-   "seconds": 0.9937520027160645
+   "seconds": 0.6970067024230957
   },
   {
    "id": "T-14",
@@ -626,7 +626,7 @@
     "R-003",
     "R-001"
    ],
-   "seconds": 0.9524586200714111
+   "seconds": 0.7747361660003662
   },
   {
    "id": "T-15",
@@ -665,7 +665,7 @@
     "R-217",
     "R-001"
    ],
-   "seconds": 0.865065336227417
+   "seconds": 0.6949632167816162
   },
   {
    "id": "T-16",
@@ -708,7 +708,7 @@
    "recipes": [
     "R-303"
    ],
-   "seconds": 0.9168312549591064
+   "seconds": 0.6883666515350342
   },
   {
    "id": "T-17",
@@ -742,7 +742,7 @@
     "R-301",
     "R-302"
    ],
-   "seconds": 1.2410545349121094
+   "seconds": 0.6724565029144287
   },
   {
    "id": "T-18",
@@ -791,7 +791,7 @@
     "R-402",
     "R-405"
    ],
-   "seconds": 1.0310592651367188
+   "seconds": 0.737238883972168
   },
   {
    "id": "T-19",
@@ -825,7 +825,7 @@
     "R-404",
     "R-402"
    ],
-   "seconds": 1.1632320880889893
+   "seconds": 0.810605525970459
   },
   {
    "id": "T-20",
@@ -880,7 +880,7 @@
     "R-001",
     "R-007"
    ],
-   "seconds": 1.0870671272277832
+   "seconds": 0.7999050617218018
   },
   {
    "id": "T-21",
@@ -920,7 +920,7 @@
     "R-303",
     "R-304"
    ],
-   "seconds": 0.9024207592010498
+   "seconds": 0.6913230419158936
   },
   {
    "id": "T-22",
@@ -958,7 +958,7 @@
    "recipes": [
     "W-000"
    ],
-   "seconds": 0.9276154041290283
+   "seconds": 0.7108907699584961
   },
   {
    "id": "T-23",
@@ -1003,7 +1003,7 @@
     "R-206",
     "R-203"
    ],
-   "seconds": 1.0327255725860596
+   "seconds": 0.7913095951080322
   },
   {
    "id": "T-24",
@@ -1042,7 +1042,7 @@
     "R-501",
     "R-503"
    ],
-   "seconds": 24.687745094299316
+   "seconds": 17.23480486869812
   },
   {
    "id": "T-25",
@@ -1086,7 +1086,61 @@
     "R-502",
     "R-505"
    ],
-   "seconds": 0.9082028865814209
+   "seconds": 0.7299695014953613
+  },
+  {
+   "id": "T-26",
+   "file": "t26_offset_feasibility.py",
+   "task": "Detect, before running Solidify, that a concave fold is too tight for the requested thickness, and show the silent dimensional error it causes.",
+   "priority": "P1",
+   "assertions": [
+    {
+     "name": "tight 15-degree fold is flagged at 18 mm",
+     "passed": true,
+     "detail": "1 conflicts; interior 15.0 deg, needs 0.1367 m of face, has 0.0500 m"
+    },
+    {
+     "name": "the measured interior angle matches the constructed 15 degrees",
+     "passed": true,
+     "detail": "measured 14.999991993362109"
+    },
+    {
+     "name": "the same fold is fine at 0.5 mm",
+     "passed": true,
+     "detail": "0 conflicts at 0.5 mm"
+    },
+    {
+     "name": "a gentle 150-degree fold is not flagged (no false positive)",
+     "passed": true,
+     "detail": "0 conflicts"
+    },
+    {
+     "name": "the smooth T-02 fixture is not flagged (no false positive)",
+     "passed": true,
+     "detail": "0 conflicts"
+    },
+    {
+     "name": "the damaged result still passes every topology check",
+     "passed": true,
+     "detail": "manifold=True closed=True self_intersecting=0 - a topology-only gate would pass this"
+    },
+    {
+     "name": "but the part overshoots in Z by roughly the predicted reach",
+     "passed": true,
+     "detail": "grew 0.1379 m vs predicted reach 0.1367 m (0.9% off)"
+    },
+    {
+     "name": "the overshoot dwarfs the requested wall thickness",
+     "passed": true,
+     "detail": "an 18 mm wall added 137.9 mm of height"
+    }
+   ],
+   "error": null,
+   "recipes": [
+    "R-201",
+    "R-202"
+   ],
+   "seconds": 0.8460845947265625
   },
   {
    "id": "T-99",
@@ -1124,9 +1178,9 @@
    "recipes": [
     "D-99"
    ],
-   "seconds": 1.703587532043457
+   "seconds": 0.9805545806884766
   }
  ],
- "passed": 26,
- "total": 26
+ "passed": 27,
+ "total": 27
 }

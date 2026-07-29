@@ -158676,6 +158676,38 @@
     }
    }
   },
+  "import_curve.svg": {
+   "description": "Load a SVG file",
+   "properties": {
+    "directory": {
+     "default": "",
+     "readonly": false,
+     "subtype": "DIR_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "filepath": {
+     "default": "",
+     "readonly": false,
+     "subtype": "FILE_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "files": {
+     "readonly": true,
+     "subtype": "NONE",
+     "type": "COLLECTION",
+     "unit": "NONE"
+    },
+    "filter_glob": {
+     "default": "*.svg",
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "STRING",
+     "unit": "NONE"
+    }
+   }
+  },
   "import_scene.gltf": {
    "description": "Load a glTF 2.0 file",
    "properties": {
@@ -160391,8 +160423,627 @@
     }
    }
   },
-  "wm.gpencil_import_svg": {
-   "__error__": "'get_rna_type(\"WM_OT_gpencil_import_svg\") not found'"
+  "wm.grease_pencil_export_pdf": {
+   "description": "Export Grease Pencil to PDF",
+   "properties": {
+    "check_existing": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "display_type": {
+     "default": "DEFAULT",
+     "enum": [
+      "DEFAULT",
+      "LIST_VERTICAL",
+      "LIST_HORIZONTAL",
+      "THUMBNAIL"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "filemode": {
+     "default": 8,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "INT",
+     "unit": "NONE"
+    },
+    "filepath": {
+     "default": "",
+     "readonly": false,
+     "subtype": "FILE_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "filter_alembic": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_archive": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_backup": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blender": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blenlib": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_btx": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_folder": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_font": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_image": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_movie": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_obj": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_python": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_sound": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_text": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_usd": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_volume": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "frame_mode": {
+     "default": "ACTIVE",
+     "enum": [
+      "ACTIVE",
+      "SELECTED",
+      "SCENE"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "selected_object_type": {
+     "default": "ACTIVE",
+     "enum": [
+      "ACTIVE",
+      "SELECTED",
+      "VISIBLE"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "sort_method": {
+     "default": "",
+     "enum": [],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "stroke_sample": {
+     "default": 0.0,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "FLOAT",
+     "unit": "NONE"
+    },
+    "use_fill": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "use_uniform_width": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    }
+   }
+  },
+  "wm.grease_pencil_export_svg": {
+   "description": "Export Grease Pencil to SVG",
+   "properties": {
+    "check_existing": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "display_type": {
+     "default": "DEFAULT",
+     "enum": [
+      "DEFAULT",
+      "LIST_VERTICAL",
+      "LIST_HORIZONTAL",
+      "THUMBNAIL"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "filemode": {
+     "default": 8,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "INT",
+     "unit": "NONE"
+    },
+    "filepath": {
+     "default": "",
+     "readonly": false,
+     "subtype": "FILE_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "filter_alembic": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_archive": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_backup": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blender": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blenlib": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_btx": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_folder": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_font": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_image": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_movie": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_obj": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_python": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_sound": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_text": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_usd": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_volume": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "frame_mode": {
+     "default": "ACTIVE",
+     "enum": [
+      "ACTIVE",
+      "SELECTED",
+      "SCENE"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "selected_object_type": {
+     "default": "ACTIVE",
+     "enum": [
+      "ACTIVE",
+      "SELECTED",
+      "VISIBLE"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "sort_method": {
+     "default": "",
+     "enum": [],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "stroke_sample": {
+     "default": 0.0,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "FLOAT",
+     "unit": "NONE"
+    },
+    "use_clip_camera": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "use_fill": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "use_uniform_width": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    }
+   }
+  },
+  "wm.grease_pencil_import_svg": {
+   "description": "Import SVG into Grease Pencil",
+   "properties": {
+    "check_existing": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "directory": {
+     "default": "",
+     "readonly": false,
+     "subtype": "DIR_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "display_type": {
+     "default": "DEFAULT",
+     "enum": [
+      "DEFAULT",
+      "LIST_VERTICAL",
+      "LIST_HORIZONTAL",
+      "THUMBNAIL"
+     ],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "filemode": {
+     "default": 8,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "INT",
+     "unit": "NONE"
+    },
+    "filepath": {
+     "default": "",
+     "readonly": false,
+     "subtype": "FILE_PATH",
+     "type": "STRING",
+     "unit": "NONE"
+    },
+    "files": {
+     "readonly": true,
+     "subtype": "NONE",
+     "type": "COLLECTION",
+     "unit": "NONE"
+    },
+    "filter_alembic": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_archive": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_backup": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blender": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_blenlib": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_btx": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_folder": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_font": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_image": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_movie": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_obj": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_python": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_sound": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_text": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_usd": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "filter_volume": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "recenter_bounds": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "relative_path": {
+     "default": true,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    },
+    "resolution": {
+     "default": 10,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "INT",
+     "unit": "NONE"
+    },
+    "scale": {
+     "default": 10.0,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "FLOAT",
+     "unit": "NONE"
+    },
+    "sort_method": {
+     "default": "",
+     "enum": [],
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "ENUM",
+     "unit": "NONE"
+    },
+    "use_scene_unit": {
+     "default": false,
+     "readonly": false,
+     "subtype": "NONE",
+     "type": "BOOLEAN",
+     "unit": "NONE"
+    }
+   }
   },
   "wm.obj_export": {
    "description": "Save the scene to a Wavefront OBJ file",
