@@ -97,8 +97,11 @@ modifier type and `bmesh.ops` name appearing in any `.md` or `.py` under
 produced by live introspection of the binary above. The check covers this
 project's own writing — nothing is exempt.
 
-`api_dump.json` contents: 27 modifiers, 65 node types, 59 operators, 15
-structs, 83 `bmesh.ops`, 3 runtime-only types.
+`api_dump.json` contents: 27 modifiers, 62 resolved node types (of 63 probed —
+the 63rd is `GeometryNodeBevel`, recorded as absent), 60 operators, 15 structs,
+83 `bmesh.ops`, 3 node-tree identifiers and 2 runtime-only types. The validator
+reports its known-node pool as 67, which is the 62 resolved nodes plus those
+node-tree and runtime identifiers.
 
 ### A defect found in this project's own tooling
 
